@@ -222,7 +222,7 @@ void draw() {
   for (int i=0; i<tuioCursorList.size (); i++) {
     TuioCursor tcur = tuioCursorList.get(i);
     stroke(255, 255, 255, 170);
-    ellipse( tcur.getScreenX(width), tcur.getScreenY(height), 45, 45);
+    ellipse(width-tcur.getScreenX(width), tcur.getScreenY(height), 45, 45);
   }
   popStyle();
 }

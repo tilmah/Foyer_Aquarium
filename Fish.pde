@@ -11,7 +11,8 @@ class Fish extends Boid {
   private float tailSizeW;
   private float tailSizeH;
 
-  private color mainColor;
+  private color eyeColour;
+  private color mainColour;
 
   private PVector YawNorm;
 
@@ -36,7 +37,8 @@ class Fish extends Boid {
     //Initial boid attributes
     super(locationX, locationY, 1.5, 0.03);
     //Fish colour
-    mainColor = #000000;
+    mainColour = #a7ff70;
+    eyeColour = #FFFFFF;
     //Static body size
     bodySizeW    = random(15, 30);
     bodySizeH    = bodySizeW/2.5;
@@ -107,11 +109,11 @@ class Fish extends Boid {
     } else if (tuioCursorList.size ()>0 && curiosity>=80) { //cursor list exists and actually curious
       //need to add a find closest tuio object loop.
       TuioCursor tcur0 = tuioCursorList.get(0);
-      PVector interAct = new PVector(tcur0.getScreenX(width), tcur0.getScreenY(height), 0.0);
+      PVector interAct = new PVector(width-tcur0.getScreenX(width), tcur0.getScreenY(height), 0.0);
       float interActDist = PVector.dist(interAct, location);
       for (int i=1; i<tuioCursorList.size (); i++) {//look through find the closest tuio cursor
         TuioCursor tcur = tuioCursorList.get(i);
-        PVector PVtcur = new PVector(tcur.getScreenX(width), tcur.getScreenY(height), 0.0);
+        PVector PVtcur = new PVector(width-tcur.getScreenX(width), tcur.getScreenY(height), 0.0);
         float tcurDist = PVector.dist(location, PVtcur);
         if (tcurDist < interActDist) { //remember and replace first cursor if closer
           interAct = PVtcur.copy();
@@ -216,7 +218,7 @@ class Fish extends Boid {
   private void renderBody( Flagellum _flag, float _sizeOffsetA, float _sizeOffsetB ) {
     pushMatrix();
     //Head
-    fill(#d230b9);
+    fill(mainColour);
     beginShape();
     //start at top corner.
     vertex(_flag.spine[0][0], -(bodySizeH/2), _flag.spine[0][1]);
@@ -232,7 +234,7 @@ class Fish extends Boid {
     vertex(_flag.spine[0][0], -(bodySizeH/2)*.35, _flag.spine[0][1]);
     endShape();
     //Eye
-    fill(255);
+    fill(eyeColour);
     beginShape();
     vertex(_flag.spine[0][0]+(bodySizeW/2)*.1, 0, _flag.spine[0][1]);
     vertex(_flag.spine[0][0]+(bodySizeW/2)*.15, -(bodySizeH/2)*.2, _flag.spine[0][1]);
@@ -244,7 +246,7 @@ class Fish extends Boid {
     vertex(_flag.spine[0][0]+(bodySizeW/2)*.15, (bodySizeH/2)*.2, _flag.spine[0][1]);
     endShape();
     //head
-    fill(#d230b9);
+    fill(mainColour);
     beginShape();
     vertex(_flag.spine[0][0], (bodySizeH/2), _flag.spine[0][1]);
     //top mid
@@ -259,7 +261,7 @@ class Fish extends Boid {
     vertex(_flag.spine[0][0], (bodySizeH/2)*.35, _flag.spine[0][1]);
     endShape();
 
-    fill(#d230b9);
+    fill(mainColour);
     for ( int n = 1; n < _flag.numNodes; n++ ) {
 
       float x1  = _flag.spine[n][0];
