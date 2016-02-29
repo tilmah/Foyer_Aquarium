@@ -43,7 +43,6 @@ Flock flock;
 Jellyfish jelly1;
 Jellyfish jelly2;
 Jellyfish jelly3;
-
 //Bubbles
 ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
 
@@ -117,14 +116,17 @@ void setup() {
 void draw() {
   /*/Camera draw
    */
-  //background
-  background(#31134b);
+  //background, version 1:31134b
+  background(#1a2e3d);
 
   //range conversion - turn this into function.
   float OldRange = 480 - 0;
   float NewRange = 0 - -80;
   float aquaVolume = (((mouseY) * NewRange) / OldRange) + -80;
-
+  
+  //PVector 
+  //jellyTrack
+  
   //start sounds
   if (!audioPlay) {
     sndAqua.play();
@@ -149,6 +151,44 @@ void draw() {
 
     audioPlay=true;
   }
+  //shark bass
+  if (shark.location.x > -200.0 && shark.location.x<(width/4)*3) {
+      sndBass.setGain(sndBass.getGain()+0.1);
+      if (sndBass.getGain()>0.0) {
+        sndBass.setGain(0.0); 
+      }
+    } else if (shark.location.x < 0.0 || shark.location.x>(width/4)*3) {
+      sndBass.setGain(sndBass.getGain()-0.05);
+      if (sndBass.getGain()<-80.0) {
+        sndBass.setGain(-80.0); 
+      }
+    }
+   text("x:"+shark.location.x, 10, 20);
+   text(sndBass.getGain(), 10, 40);
+  //Jelly fish keys
+  if (jelly1.location.x > (width/4) && jelly1.location.x<(width/4)*3) {
+    if (jelly1.location.y > (height/4) || jelly1.location.y<(height/4)*3) {
+        if (jelly2.location.x > (width/4) && jelly2.location.x<(width/4)*3) {
+          if (jelly2.location.y > (height/4) || jelly2.location.y<(height/4)*3) {
+              if (jelly3.location.x > (width/4) && jelly3.location.x<(width/4)*3) {
+                  if (jelly3.location.y > (height/4) || jelly3.location.y<(height/4)*3) {
+                      sndKeys.setGain(sndKeys.getGain()+0.1);
+                  }
+              }
+          }
+        }
+    }
+  } else {
+      sndKeys.setGain(sndKeys.getGain()-0.05);
+    }
+    if (sndKeys.getGain()>1.0) {
+        sndKeys.setGain(1.0); 
+    }
+    if (sndKeys.getGain()<-80.0) {
+        sndKeys.setGain(-80.0); 
+      }
+  fill(#ff00ff);
+   text(sndKeys.getGain(), 10, 100);
   //Set volumes.---need implemenation using Interaction and Boids objects
   // pushMatrix();//pushed back.. 
   // translate(0.0,0.0,-200.0);//..for debugging
@@ -209,6 +249,8 @@ void draw() {
       f[i][0] = random(width);
     }
   }
+  //add sound
+  
 
   //Update Noise animation
   //noiseAnimation.display(0, 0);
@@ -219,10 +261,24 @@ void draw() {
   noFill();
   blendMode(ADD);
   strokeWeight(8);
-  for (int i=0; i<tuioCursorList.size (); i++) {
+  for (int i=0; i<tuioCursorList.size(); i++) {
     TuioCursor tcur = tuioCursorList.get(i);
     stroke(255, 255, 255, 170);
     ellipse(width-tcur.getScreenX(width), tcur.getScreenY(height), 45, 45);
   }
+  //Drums
+  if (tuioCursorList.size()>0) {
+      sndDrums.setGain(sndDrums.getGain()+0.35);
+      if (sndDrums.getGain()>0.0) {
+        sndDrums.setGain(0.0); 
+      }
+    } else {
+      sndDrums.setGain(sndDrums.getGain()-0.08);
+      if (sndDrums.getGain()<-80.0) {
+        sndDrums.setGain(-80.0); 
+      }
+    }
+   text(tuioCursorList.size(), 10, 50);
+   text(sndDrums.getGain(), 10, 70);
   popStyle();
 }

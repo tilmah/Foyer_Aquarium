@@ -107,8 +107,8 @@ class Shark extends Boid {
     fill(#f77400);
     beginShape();
     //start at top corner.
-    vertex(_flag.spine[0][0]+bodySizeW*.16, bodySizeW*.13, _flag.spine[0][1]);
-    vertex(_flag.spine[0][0]+bodySizeW*.14, bodySizeW*.15, _flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*.16, bodySizeW*.155, _flag.spine[0][1]);
+    //vertex(_flag.spine[0][0]+bodySizeW*.14, bodySizeW*.15, _flag.spine[0][1]);
     vertex(_flag.spine[0][0]+bodySizeW*.53, bodySizeW*.13, _flag.spine[0][1]);
     vertex(_flag.spine[0][0]+bodySizeW*.56, bodySizeW*.11, _flag.spine[0][1]);
     vertex(_flag.spine[0][0]+bodySizeW*.44, 0, _flag.spine[0][1]);
@@ -136,7 +136,14 @@ class Shark extends Boid {
     vertex(_flag.spine[0][0]+(bodySizeW*.24), -(bodySizeW*.06), _flag.spine[0][1]);
     vertex(_flag.spine[0][0]+(bodySizeW*.18), -(bodySizeW*.06), _flag.spine[0][1]);
     endShape();
-
+    //Back of skull
+    beginShape();
+    vertex(_flag.spine[0][0]+bodySizeW*.20, bodySizeW*-.01, _flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*.12, bodySizeW*.16, _flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*.09, bodySizeW*.16, _flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*.09, bodySizeW*-.08, _flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*.12, bodySizeW*-.07, _flag.spine[0][1]);
+    endShape();
     fill(#f77400);
 
     for ( int n = 1; n < _flag.numNodes-1; n++ ) {

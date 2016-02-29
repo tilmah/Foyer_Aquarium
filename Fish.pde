@@ -37,7 +37,7 @@ class Fish extends Boid {
     //Initial boid attributes
     super(locationX, locationY, 1.5, 0.03);
     //Fish colour
-    mainColour = #a7ff70;
+    mainColour = #8EEEDF;
     eyeColour = #FFFFFF;
     //Static body size
     bodySizeW    = random(15, 30);

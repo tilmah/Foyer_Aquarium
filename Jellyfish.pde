@@ -365,4 +365,7 @@ class Particle {
       }
     }
   }
+//  public PVector getPos() {
+//     return location;
+//  }
 }
