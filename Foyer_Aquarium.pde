@@ -151,45 +151,7 @@ void draw() {
 
     audioPlay=true;
   }
-  //shark bass
-  if (shark.location.x > -200.0 && shark.location.x<(width/4)*3) {
-      sndBass.setGain(sndBass.getGain()+0.1);
-      if (sndBass.getGain()>0.0) {
-        sndBass.setGain(0.0); 
-      }
-    } else if (shark.location.x < 0.0 || shark.location.x>(width/4)*3) {
-      sndBass.setGain(sndBass.getGain()-0.05);
-      if (sndBass.getGain()<-80.0) {
-        sndBass.setGain(-80.0); 
-      }
-    }
-   text("x:"+shark.location.x, 10, 20);
-   text(sndBass.getGain(), 10, 40);
-  //Jelly fish keys
-  if (jelly1.location.x > (width/4) && jelly1.location.x<(width/4)*3) {
-    if (jelly1.location.y > (height/4) || jelly1.location.y<(height/4)*3) {
-        if (jelly2.location.x > (width/4) && jelly2.location.x<(width/4)*3) {
-          if (jelly2.location.y > (height/4) || jelly2.location.y<(height/4)*3) {
-              if (jelly3.location.x > (width/4) && jelly3.location.x<(width/4)*3) {
-                  if (jelly3.location.y > (height/4) || jelly3.location.y<(height/4)*3) {
-                      sndKeys.setGain(sndKeys.getGain()+0.1);
-                  }
-              }
-          }
-        }
-    }
-  } else {
-      sndKeys.setGain(sndKeys.getGain()-0.05);
-    }
-    if (sndKeys.getGain()>1.0) {
-        sndKeys.setGain(1.0); 
-    }
-    if (sndKeys.getGain()<-80.0) {
-        sndKeys.setGain(-80.0); 
-      }
-  fill(#ff00ff);
-   text(sndKeys.getGain(), 10, 100);
-  //Set volumes.---need implemenation using Interaction and Boids objects
+  
   // pushMatrix();//pushed back.. 
   // translate(0.0,0.0,-200.0);//..for debugging
   
@@ -249,11 +211,9 @@ void draw() {
       f[i][0] = random(width);
     }
   }
-  //add sound
-  
-
+ 
   //Update Noise animation
-  //noiseAnimation.display(0, 0);
+    //noiseAnimation.display(0, 0);
   //Circle display for interaction placement/GUI  
   //---TUIO Stuffs
   ArrayList<TuioCursor> tuioCursorList = tuioClient.getTuioCursorList();
@@ -266,19 +226,61 @@ void draw() {
     stroke(255, 255, 255, 170);
     ellipse(width-tcur.getScreenX(width), tcur.getScreenY(height), 45, 45);
   }
-  //Drums
+  
+  //Set volumes
+  //shark bass
+  if (shark.location.x > -200.0 && shark.location.x<(width/4)*3) {
+      sndBass.setGain(sndBass.getGain()+0.1);
+      if (sndBass.getGain()>0.0) {
+        sndBass.setGain(0.0); 
+      }
+    } else if (shark.location.x < 0.0 || shark.location.x>(width/4)*3) {
+      sndBass.setGain(sndBass.getGain()-0.05);
+      if (sndBass.getGain()<-80.0) {
+        sndBass.setGain(-80.0); 
+      }
+    }
+   //Debug
+   //text("x:"+shark.location.x, 10, 20);
+   //text(sndBass.getGain(), 10, 40);
+  //Jelly fish keys
+  if (jelly1.location.x > (width/4) && jelly1.location.x<(width/4)*3) {
+    if (jelly1.location.y > (height/4) || jelly1.location.y<(height/4)*3) {
+        if (jelly2.location.x > (width/4) && jelly2.location.x<(width/4)*3) {
+          if (jelly2.location.y > (height/4) || jelly2.location.y<(height/4)*3) {
+              if (jelly3.location.x > (width/4) && jelly3.location.x<(width/4)*3) {
+                  if (jelly3.location.y > (height/4) || jelly3.location.y<(height/4)*3) {
+                      sndKeys.setGain(sndKeys.getGain()+0.1);
+                  }
+              }
+          }
+        }
+    }
+  } else {
+      sndKeys.setGain(sndKeys.getGain()-0.05);
+    }
+    if (sndKeys.getGain()>1.0) {
+        sndKeys.setGain(1.0); 
+    }
+    if (sndKeys.getGain()<-80.0) {
+        sndKeys.setGain(-80.0); 
+      }
+  //Debug    
+  //text(sndKeys.getGain(), 10, 100);
+  //Drums level interact
   if (tuioCursorList.size()>0) {
-      sndDrums.setGain(sndDrums.getGain()+0.35);
+      sndDrums.setGain(sndDrums.getGain()+0.05);
       if (sndDrums.getGain()>0.0) {
         sndDrums.setGain(0.0); 
       }
     } else {
-      sndDrums.setGain(sndDrums.getGain()-0.08);
+      sndDrums.setGain(sndDrums.getGain()-0.03);
       if (sndDrums.getGain()<-80.0) {
         sndDrums.setGain(-80.0); 
       }
     }
-   text(tuioCursorList.size(), 10, 50);
-   text(sndDrums.getGain(), 10, 70);
+    //Debug
+   //text(tuioCursorList.size(), 10, 50);
+   //text(sndDrums.getGain(), 10, 70);
   popStyle();
 }
