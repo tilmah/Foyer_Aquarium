@@ -217,14 +217,66 @@ void draw() {
   //Circle display for interaction placement/GUI  
   //---TUIO Stuffs
   ArrayList<TuioCursor> tuioCursorList = tuioClient.getTuioCursorList();
-  pushStyle();
-  noFill();
-  blendMode(ADD);
-  strokeWeight(8);
+
   for (int i=0; i<tuioCursorList.size(); i++) {
     TuioCursor tcur = tuioCursorList.get(i);
+    float handSize=100.0;
+    fill(#33CCFF);
+    pushMatrix();
+    translate(width-tcur.getScreenX(width), tcur.getScreenY(height));
+    //thumb
+    beginShape();
+    vertex(handSize*-0.265,handSize*-0.25,0.0);
+    vertex(handSize*-0.265,handSize*0.0,0.0);
+    vertex(handSize*-0.2,handSize*0.15,0.0);
+    vertex(handSize*-0.2,handSize*-0.15,0.0);
+    endShape();
+    //palm
+    beginShape();
+    vertex(handSize*-0.15,handSize*-0.15, 0,0);
+    vertex(handSize*-0.15,handSize*0.15,0.0);
+    vertex(handSize*0.1,handSize*0.15,0.0);
+    vertex(handSize*0.2,handSize*0.075,0.0);
+    vertex(handSize*0.2,handSize*-0.15,0.0);
+    endShape();
+    //pointer
+    beginShape();
+    vertex(handSize*-0.1,handSize*-0.5, 0,0);
+    vertex(handSize*-0.1,handSize*-0.2,0.0);
+    vertex(handSize*-0.15,handSize*-0.2,0.0);
+    vertex(handSize*-0.15,handSize*-0.5,0.0);
+    endShape();
+    //rude
+    beginShape();
+    vertex(0.0,handSize*-0.55, 0,0);
+    vertex(0.0,handSize*-0.2,0.0);
+    vertex(handSize*-0.05,handSize*-0.2,0.0);
+    vertex(handSize*-0.05,handSize*-0.55,0.0);
+    endShape();
+    //ring
+    beginShape();
+    vertex(handSize*0.1,handSize*-0.5, 0,0);
+    vertex(handSize*0.1,handSize*-0.2,0.0);
+    vertex(handSize*0.05,handSize*-0.2,0.0);
+    vertex(handSize*0.05,handSize*-0.5,0.0);
+    endShape();
+    //pinky
+    beginShape();
+    vertex(handSize*0.2,handSize*-0.425, 0,0);
+    vertex(handSize*0.2,handSize*-0.2,0.0);
+    vertex(handSize*0.15,handSize*-0.2,0.0);
+    vertex(handSize*0.15,handSize*-0.425,0.0);
+    endShape();
+    popMatrix();
+    //Old Hand Marker
+    /*
+    pushStyle();
+    blendMode(ADD);
+    strokeWeight(8);
+    noFill();
     stroke(255, 255, 255, 170);
     ellipse(width-tcur.getScreenX(width), tcur.getScreenY(height), 45, 45);
+    popStyle();*/
   }
   
   //Set volumes
@@ -269,12 +321,12 @@ void draw() {
   //text(sndKeys.getGain(), 10, 100);
   //Drums level interact
   if (tuioCursorList.size()>0) {
-      sndDrums.setGain(sndDrums.getGain()+0.05);
+      sndDrums.setGain(sndDrums.getGain()+0.065);
       if (sndDrums.getGain()>0.0) {
         sndDrums.setGain(0.0); 
       }
     } else {
-      sndDrums.setGain(sndDrums.getGain()-0.03);
+      sndDrums.setGain(sndDrums.getGain()-0.01);
       if (sndDrums.getGain()<-80.0) {
         sndDrums.setGain(-80.0); 
       }
@@ -282,5 +334,4 @@ void draw() {
     //Debug
    //text(tuioCursorList.size(), 10, 50);
    //text(sndDrums.getGain(), 10, 70);
-  popStyle();
 }
