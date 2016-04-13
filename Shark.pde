@@ -36,18 +36,20 @@ class Shark extends Boid {
     tailSizeW    = bodySizeW;
     tailSizeH    = bodySizeH;
 
-    body = new Flagellum( bodySizeW, bodySizeH, numBodySegments );
+    body = new Flagellum( bodySizeW, bodySizeH/2, numBodySegments, 0.3 );
 
-    tail = new Flagellum( tailSizeH, tailSizeW, numTailSegments);
+    tail = new Flagellum( tailSizeH, tailSizeW, numTailSegments, 0.4);
     
     r= 2.0;
     outCam=300.0;
   }
+  
   //Run
   public void run(ArrayList<Boid> flock) {
     update(flock);
     render();
   }
+  
   //Update
   public void update(ArrayList<Boid> flock) {
     super.run(flock);
@@ -144,6 +146,28 @@ class Shark extends Boid {
     vertex(_flag.spine[0][0]+bodySizeW*.09, bodySizeW*-.08, _flag.spine[0][1]);
     vertex(_flag.spine[0][0]+bodySizeW*.12, bodySizeW*-.07, _flag.spine[0][1]);
     endShape();
+    //gill1 lowest
+    beginShape();
+    vertex(_flag.spine[0][0]+bodySizeW*.065,bodySizeW*-.08,_flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*-.03,bodySizeW*-.08,_flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*-.0225,bodySizeW*-.04,_flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*.065,bodySizeW*-.04,_flag.spine[0][1]);
+    endShape();
+    //gill2
+    beginShape();
+    vertex(_flag.spine[0][0]+bodySizeW*.065,bodySizeW*.02,_flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*-.015,bodySizeW*.02,_flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*-.01,bodySizeW*.06,_flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*.065,bodySizeW*.06,_flag.spine[0][1]);    
+    endShape();
+    //gill3 highest
+    beginShape();
+    vertex(_flag.spine[0][0]+bodySizeW*.065,bodySizeW*.16,_flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*.01,bodySizeW*.16,_flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*.005,bodySizeW*.12,_flag.spine[0][1]);
+    vertex(_flag.spine[0][0]+bodySizeW*.065,bodySizeW*.12,_flag.spine[0][1]);    
+    endShape();
+    
     fill(#f77400);
 
     for ( int n = 1; n < _flag.numNodes-1; n++ ) {

@@ -14,13 +14,15 @@ class Flagellum {
   float thetaVel;
 
 
-  Flagellum( float _sizeW, float _sizeH, int _numNodes ) {
+  Flagellum( float _sizeW, float _sizeH, int _numNodes, float _muscleRange ) {
 
     sizeW    = _sizeW;
     sizeH    = _sizeH;
 
     numNodes  = _numNodes;
-
+    
+    MUSCLE_RANGE   = _muscleRange;
+    
     spine     = new float[numNodes][2];
 
     spaceX     = sizeW / float(numNodes + 1);

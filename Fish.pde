@@ -13,6 +13,8 @@ class Fish extends Boid {
 
   private color eyeColour;
   private color mainColour;
+  private color c1;
+  private color c2;
 
   private PVector YawNorm;
 
@@ -28,20 +30,23 @@ class Fish extends Boid {
   private int lastCuriousTalk;
   private int fleeInterActTimer;
   //knowledge
+  private PVector interAct;
   private float predatorDist;
-  private float interactDist;
+  private float interActDist;
   private PVector interActFlee;
   private float tcurSpeed;
 
   public Fish(float locationX, float locationY) {
     //Initial boid attributes
     super(locationX, locationY, 1.5, 0.03);
-    //Fish colour
-    mainColour = #8EEEDF;
-    eyeColour = #FFFFFF;
     //Static body size
-    bodySizeW    = random(15, 30);
+    bodySizeW    = random(15,35);
     bodySizeH    = bodySizeW/2.5;
+    //Fish colour
+    c1 = #d44fff;
+    c2 = #8EEEDF;
+    mainColour = lerpColor(c1,c2,(bodySizeW)/30);
+    eyeColour = #FFFFFF;
     //For flagellum
     numBodySegments = 10;
     //Tail sizes from bodySize
@@ -50,8 +55,8 @@ class Fish extends Boid {
     //For flagellum
     numTailSegments = 6;
     //Initalize Flagellums
-    body = new Flagellum( bodySizeW, bodySizeH, numBodySegments );
-    tail = new Flagellum( tailSizeH, tailSizeW, numTailSegments);
+    body = new Flagellum( bodySizeW, bodySizeH, numBodySegments, 0.2 );
+    tail = new Flagellum( tailSizeH, tailSizeW, numTailSegments, 0.3 );
     //smaller out camera
     outCam = 70.0;
     happiness = 50;
@@ -94,7 +99,7 @@ class Fish extends Boid {
     //Get Tuio Cursors
     ArrayList<TuioCursor> tuioCursorList = tuioClient.getTuioCursorList();
     //Decide what to do
-    if (fleeInterActTimer>0 && PVector.dist(location, interActFlee)<150) { //if still scared keep fleeing interaction
+    if (fleeInterActTimer>0 && PVector.dist(location, interActFlee)<200) { //if still scared keep fleeing interaction
       super.evade(interActFlee, fish);
     } else if (fear>=80) //--add a multiplication utility with the knowlegde on how far it will kick in.
     {
@@ -104,16 +109,16 @@ class Fish extends Boid {
       if (lastFearTalk == 0) {
         int i = int(random((fishTalk.length/2+1), fishTalk.length-1));
         fishLine = fishTalk[i];
-        lastFearTalk = int(random(400, 600));
+        lastFearTalk = int(random(600,800));
       }
-    } else if (tuioCursorList.size ()>0 && curiosity>=80) { //cursor list exists and actually curious
+    } else if (tuioCursorList.size ()>0 && curiosity>=70) { //cursor list exists and actually curious
       //need to add a find closest tuio object loop.
       TuioCursor tcur0 = tuioCursorList.get(0);
-      PVector interAct = new PVector(width-tcur0.getScreenX(width), tcur0.getScreenY(height), 0.0);
-      float interActDist = PVector.dist(interAct, location);
+      interAct = new PVector(tcur0.getScreenX(width), height-tcur0.getScreenY(height), 0.0);
+      interActDist = PVector.dist(interAct, location);
       for (int i=1; i<tuioCursorList.size (); i++) {//look through find the closest tuio cursor
         TuioCursor tcur = tuioCursorList.get(i);
-        PVector PVtcur = new PVector(width-tcur.getScreenX(width), tcur.getScreenY(height), 0.0);
+        PVector PVtcur = new PVector(tcur.getScreenX(width), height-tcur.getScreenY(height), 0.0);
         float tcurDist = PVector.dist(location, PVtcur);
         if (tcurDist < interActDist) { //remember and replace first cursor if closer
           interAct = PVtcur.copy();
@@ -123,14 +128,14 @@ class Fish extends Boid {
       }
       TuioCursor tcur = tuioCursorList.get(tcurGet);//grab the list again
       tcurSpeed=tcur.getMotionSpeed();//get the speed
-      if (interActDist < (curiosity) && tcurSpeed<0.25) {
+      if (interActDist < (curiosity+100) && tcurSpeed<0.8) {
         super.seeker(interAct, fish);
         happiness+=1;
         //say something
         if (lastCuriousTalk == 0 && curiosity>80) {
           int i = int(random(0, fishTalk.length/2));
           fishLine = fishTalk[i];
-          lastCuriousTalk = int(random(800, 1000));
+          lastCuriousTalk = int(random(800, 1200));
         }
       } else if (interActDist < (curiosity)) {
         //Say something
@@ -138,7 +143,7 @@ class Fish extends Boid {
         if (lastFearTalk == 0) {
           int i = int(random((fishTalk.length/2+1), fishTalk.length-1));
           fishLine = fishTalk[i];
-          lastFearTalk = int(random(400, 600));
+          lastFearTalk = int(random(600, 800));
         }
         interActFlee = interAct.copy();//Pass on position to swim away from
         fleeInterActTimer = 300;//set timer for runaway time

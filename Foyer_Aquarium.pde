@@ -31,7 +31,7 @@ boolean audioPlay;
 PImage prevFrame;
 
 //TuioObjsList
-
+float handSize=50.0;
 
 //Shark
 Shark shark;
@@ -117,7 +117,7 @@ void draw() {
   /*/Camera draw
    */
   //background, version 1:31134b
-  background(#1a2e3d);
+  background(#211238);
 
   //range conversion - turn this into function.
   float OldRange = 480 - 0;
@@ -220,63 +220,7 @@ void draw() {
 
   for (int i=0; i<tuioCursorList.size(); i++) {
     TuioCursor tcur = tuioCursorList.get(i);
-    float handSize=100.0;
-    fill(#33CCFF);
-    pushMatrix();
-    translate(width-tcur.getScreenX(width), tcur.getScreenY(height));
-    //thumb
-    beginShape();
-    vertex(handSize*-0.265,handSize*-0.25,0.0);
-    vertex(handSize*-0.265,handSize*0.0,0.0);
-    vertex(handSize*-0.2,handSize*0.15,0.0);
-    vertex(handSize*-0.2,handSize*-0.15,0.0);
-    endShape();
-    //palm
-    beginShape();
-    vertex(handSize*-0.15,handSize*-0.15, 0,0);
-    vertex(handSize*-0.15,handSize*0.15,0.0);
-    vertex(handSize*0.1,handSize*0.15,0.0);
-    vertex(handSize*0.2,handSize*0.075,0.0);
-    vertex(handSize*0.2,handSize*-0.15,0.0);
-    endShape();
-    //pointer
-    beginShape();
-    vertex(handSize*-0.1,handSize*-0.5, 0,0);
-    vertex(handSize*-0.1,handSize*-0.2,0.0);
-    vertex(handSize*-0.15,handSize*-0.2,0.0);
-    vertex(handSize*-0.15,handSize*-0.5,0.0);
-    endShape();
-    //rude
-    beginShape();
-    vertex(0.0,handSize*-0.55, 0,0);
-    vertex(0.0,handSize*-0.2,0.0);
-    vertex(handSize*-0.05,handSize*-0.2,0.0);
-    vertex(handSize*-0.05,handSize*-0.55,0.0);
-    endShape();
-    //ring
-    beginShape();
-    vertex(handSize*0.1,handSize*-0.5, 0,0);
-    vertex(handSize*0.1,handSize*-0.2,0.0);
-    vertex(handSize*0.05,handSize*-0.2,0.0);
-    vertex(handSize*0.05,handSize*-0.5,0.0);
-    endShape();
-    //pinky
-    beginShape();
-    vertex(handSize*0.2,handSize*-0.425, 0,0);
-    vertex(handSize*0.2,handSize*-0.2,0.0);
-    vertex(handSize*0.15,handSize*-0.2,0.0);
-    vertex(handSize*0.15,handSize*-0.425,0.0);
-    endShape();
-    popMatrix();
-    //Old Hand Marker
-    /*
-    pushStyle();
-    blendMode(ADD);
-    strokeWeight(8);
-    noFill();
-    stroke(255, 255, 255, 170);
-    ellipse(width-tcur.getScreenX(width), tcur.getScreenY(height), 45, 45);
-    popStyle();*/
+    handCursor(tcur.getScreenX(width),height-tcur.getScreenY(height),50.0);
   }
   
   //Set volumes
