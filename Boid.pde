@@ -344,8 +344,17 @@ class Boid {
   }
   //Fish Talk
   public void followingText(String _line) {
-    textSize(12);
+    float bubLen = _line.length()*6;
+    PVector bubPos = new PVector(location.x+bubLen/2,location.y-27.75);
+    float ang1 = PVector.angleBetween(location,bubPos);
     fill(255);
+    pushMatrix();
+    translate(0,0,location.z-5);
+    rect(location.x-5, location.y-32.5, bubLen+10, 20);
+    triangle(location.x,location.y-10,bubPos.x+10*sin(ang1+-90),bubPos.y+10*cos(ang1+-90),bubPos.x+10*sin(ang1+90),bubPos.y+10*cos(ang1+90));
+    popMatrix();
+    textFont(secrcode);
+    fill(0);
     text(_line, location.x, location.y-20.0, location.z);
   }
 }

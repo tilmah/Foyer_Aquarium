@@ -56,6 +56,8 @@ float[][] f = new float[count][8];
 // For noise animation
 //Animation noiseAnimation;
 
+PFont secrcode;
+
 void setup() {
   size(1920, 1200, P3D);
   smooth(4);
@@ -111,6 +113,8 @@ void setup() {
   // since we add "this" class as an argument the TuioProcessing class expects
   // an implementation of the TUIO callback methods in this class (see below)
   tuioClient  = new TuioProcessing(this);
+  
+  secrcode = createFont("monofonto.ttf", 12);
 }
 
 void draw() {
@@ -277,5 +281,4 @@ void draw() {
     }
     //Debug
    //text(tuioCursorList.size(), 10, 50);
-   //text(sndDrums.getGain(), 10, 70);
 }

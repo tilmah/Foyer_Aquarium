@@ -175,53 +175,68 @@ class Fish extends Boid {
 
     //update the boid part
     super.run(fish);
-
-    // Align body TO OBJECT
-    body.theta = TWO_PI;
+    
+    // update location and direction
+    YawNorm = velocity.copy();
+    float theta =atan2(-(-YawNorm.z), (YawNorm.x)) ;
+    
+    pushMatrix();
+    
+    //Translate/move to position
+    translate(location.x, location.y, location.z);
+    
+    float fishAngle = YawNorm.y/2*-1;
+    //Rotate whole fish
+    
+    //Run the renders
+    renderHead( body, 0.5, 0.25 );
+    renderBody( body, 0.5, 0.25 );
+    PVector tailLocation = new PVector(body.spine[numBodySegments - 1][0], 0, body.spine[numBodySegments - 1][1] );
+    renderTail(tail, tailLocation, 0.75);
+    
+    // update flagellum body rotation
+    body.theta = theta;
+    //body.theta += TWO_PI;
+    // Align tail TO body
+    tail.theta = theta;
+    tail.theta += PI;
     //Move muscle
     body.muscleFreq = norm(velocity.mag(), 0, 1) * 0.08;
     //Swim
     body.swim();
-
-    // Align tail TO OBJECT
-    tail.theta = PI;
     //move tail muscles
-    tail.muscleFreq   = norm(velocity.mag(), 0, 1 ) * 0.09;
+    tail.muscleFreq   = norm(velocity.mag(), 0, 1 ) * 0.06;
     //tail swim
     tail.swim();
-    //Run the renders
-    render();
-  }
-
-  //Rendering Stuff
-  private void render() {
-    noStroke();
-    //Debugs
-    textSize(12);
-    fill(255);
-    //text("x:"+location.x, 10, 20);
-    //text("y:"+location.y, 10, 30);
-    //text("z:"+location.z, 10, 40);
-    //text("fear: "+fear,location.x,location.y-10);
-    //text("happiness: "+happiness,location.x,location.y+15);
-    //text("curiosity: "+curiosity,location.x,location.y+30);
-    pushMatrix();
-    //Translate/move to position
-    translate(location.x, location.y, location.z);
-    //Rotate whole fish
-    YawNorm = velocity.copy();
-    rotateX(PI);
-    rotateY(atan2(-(-YawNorm.z), (YawNorm.x)));
-    rotateZ((asin(-YawNorm.y/2)));
-
-    //Render the body --which contians the tail
-    renderBody( body, 0.5, 0.25 );
-
+    
+    text(fishAngle,30,0);
     popMatrix();
   }
-
-  private void renderBody( Flagellum _flag, float _sizeOffsetA, float _sizeOffsetB ) {
+  
+ private void renderBody( Flagellum _flag, float _sizeOffsetA, float _sizeOffsetB ) {
+ //render body
+  pushMatrix();
+    fill(mainColour);
+      for ( int n = 1; n < _flag.numNodes; n++ ) {
+  
+        float x1  = _flag.spine[n][0];
+        float z1   = _flag.spine[n][1];
+        float x2   = _flag.spine[n][0];
+        float z2   = _flag.spine[n][1];
+  
+        beginShape();
+        vertex( x1+.2, (bodySizeH/2)-(n*.15), z1 );
+        vertex( x1-.2, (bodySizeH/2)-(n*.15), z1 );
+        vertex( x2-.2, -(bodySizeH/2)+(n*.15), z2 );
+        vertex( x2+.2, -(bodySizeH/2)+(n*.15), z2 );
+        endShape();
+      }
+     popMatrix();
+ }
+  private void renderHead( Flagellum _flag, float _sizeOffsetA, float _sizeOffsetB ) {
     pushMatrix();
+    rotateX(PI);
+    rotateY(atan2(-(-YawNorm.z), (YawNorm.x)));
     //Head
     fill(mainColour);
     beginShape();
@@ -265,33 +280,12 @@ class Fish extends Boid {
     //inside end
     vertex(_flag.spine[0][0], (bodySizeH/2)*.35, _flag.spine[0][1]);
     endShape();
-
-    fill(mainColour);
-    for ( int n = 1; n < _flag.numNodes; n++ ) {
-
-      float x1  = _flag.spine[n][0];
-      float z1   = _flag.spine[n][1];
-      float x2   = _flag.spine[n][0];
-      float z2   = _flag.spine[n][1];
-
-      beginShape();
-      vertex( x1+.2, (bodySizeH/2)-(n*.15), z1 );
-      vertex( x1-.2, (bodySizeH/2)-(n*.15), z1 );
-      vertex( x2-.2, -(bodySizeH/2)+(n*.15), z2 );
-      vertex( x2+.2, -(bodySizeH/2)+(n*.15), z2 );
-      endShape();
-    }
-    popMatrix();
-
-    PVector tailLocation = new PVector(body.spine[numBodySegments - 1][0], 0, body.spine[numBodySegments - 1][1] );
-
-    pushMatrix();
-    translate(tailLocation.x, 0.0, tailLocation.z);
-    renderTail(tail, tailLocation, 0.75);
     popMatrix();
   }
 
   private void renderTail( Flagellum _flag, PVector _location, float _sizeOffset ) {
+    pushMatrix();
+    translate(_location.x, 0.0, _location.z);
     //Top Strip Tail
     beginShape(QUAD_STRIP);
     for ( int n = 1; n < _flag.numNodes; n++ ) {
@@ -328,6 +322,7 @@ class Fish extends Boid {
       vertex( -x1, bodySizeH*.5, z1 );
     }
     endShape();
+    popMatrix();
   }
 
   PVector getLoc() {
