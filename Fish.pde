@@ -48,12 +48,12 @@ class Fish extends Boid {
     mainColour = lerpColor(c1,c2,(bodySizeW)/30);
     eyeColour = #FFFFFF;
     //For flagellum
-    numBodySegments = 10;
+    numBodySegments = 17;
     //Tail sizes from bodySize
     tailSizeW    = bodySizeW * 0.7;
     tailSizeH    = bodySizeH * 1.5;
     //For flagellum
-    numTailSegments = 6;
+    numTailSegments = 10;
     //Initalize Flagellums
     body = new Flagellum( bodySizeW, bodySizeH, numBodySegments, 0.2 );
     tail = new Flagellum( tailSizeH, tailSizeW, numTailSegments, 0.3 );
@@ -181,35 +181,28 @@ class Fish extends Boid {
     float theta =atan2(-(-YawNorm.z), (YawNorm.x)) ;
     
     pushMatrix();
-    
     //Translate/move to position
     translate(location.x, location.y, location.z);
-    
-    float fishAngle = YawNorm.y/2*-1;
     //Rotate whole fish
+    rotateZ(atan(YawNorm.y/(YawNorm.x));
     
     //Run the renders
     renderHead( body, 0.5, 0.25 );
     renderBody( body, 0.5, 0.25 );
-    PVector tailLocation = new PVector(body.spine[numBodySegments - 1][0], 0, body.spine[numBodySegments - 1][1] );
-    renderTail(tail, tailLocation, 0.75);
+   // PVector tailLocation = new PVector(body.spine[numBodySegments - 1][0], 0, body.spine[numBodySegments - 1][1] );
+   // renderTail(tail, tailLocation, 0.75);
     
     // update flagellum body rotation
     body.theta = theta;
     //body.theta += TWO_PI;
-    // Align tail TO body
-    tail.theta = theta;
-    tail.theta += PI;
     //Move muscle
-    body.muscleFreq = norm(velocity.mag(), 0, 1) * 0.08;
+    body.muscleFreq = norm(velocity.mag(), 0, 1) * 0.07;
     //Swim
     body.swim();
-    //move tail muscles
-    tail.muscleFreq   = norm(velocity.mag(), 0, 1 ) * 0.06;
-    //tail swim
-    tail.swim();
-    
-    text(fishAngle,30,0);
+
+    //text(YawNorm.x,30,0);
+    //text(YawNorm.y,30,10);
+    //text(YawNorm.z,30,20);
     popMatrix();
   }
   
@@ -217,7 +210,7 @@ class Fish extends Boid {
  //render body
   pushMatrix();
     fill(mainColour);
-      for ( int n = 1; n < _flag.numNodes; n++ ) {
+      for ( int n = 1; n < _flag.numNodes-6; n++ ) {
   
         float x1  = _flag.spine[n][0];
         float z1   = _flag.spine[n][1];
@@ -231,12 +224,48 @@ class Fish extends Boid {
         vertex( x2+.2, -(bodySizeH/2)+(n*.15), z2 );
         endShape();
       }
-     popMatrix();
+        //Top Strip Tail
+    beginShape(QUAD_STRIP);
+    for ( int n = 11; n < _flag.numNodes; n++ ) {
+      float x1  = _flag.spine[n][0];
+      float z1   = _flag.spine[n][1];
+      vertex( x1, -bodySizeH*.5, z1 );
+      vertex( x1, -bodySizeH*0.35, z1 );
+    }
+    endShape();
+    //Top MID Strip Tail
+    beginShape(QUAD_STRIP);
+    for ( int n = 11; n < _flag.numNodes-2; n++ ) {
+      float x1  = _flag.spine[n][0];
+      float z1   = _flag.spine[n][1];
+      vertex( x1, -bodySizeH*0.2, z1 );
+      vertex( x1, -bodySizeH*0.05, z1 );
+    }
+    endShape();
+    //Bottom MID Strip Tail
+    beginShape(QUAD_STRIP);
+    for ( int n = 11; n < _flag.numNodes-2; n++ ) {
+      float x1  = _flag.spine[n][0];
+      float z1   = _flag.spine[n][1];
+      vertex( x1, bodySizeH*0.05, z1 );
+      vertex( x1, bodySizeH*0.2, z1 );
+    }
+    endShape();
+    //Bottom Strip Tail
+    beginShape(QUAD_STRIP);
+    for ( int n = 11; n < _flag.numNodes; n++ ) {
+      float x1  = _flag.spine[n][0];
+      float z1   = _flag.spine[n][1];
+      vertex( x1, bodySizeH*0.35, z1 );
+      vertex( x1, bodySizeH*.5, z1 );
+    }
+    endShape();
+    popMatrix();
  }
+ 
   private void renderHead( Flagellum _flag, float _sizeOffsetA, float _sizeOffsetB ) {
     pushMatrix();
-    rotateX(PI);
-    rotateY(atan2(-(-YawNorm.z), (YawNorm.x)));
+    rotateY(atan2((-YawNorm.z),(YawNorm.x)));
     //Head
     fill(mainColour);
     beginShape();
@@ -279,48 +308,6 @@ class Fish extends Boid {
     vertex(_flag.spine[0][0]+(bodySizeW/2)*.3, (bodySizeH/2)*.35, _flag.spine[0][1]);
     //inside end
     vertex(_flag.spine[0][0], (bodySizeH/2)*.35, _flag.spine[0][1]);
-    endShape();
-    popMatrix();
-  }
-
-  private void renderTail( Flagellum _flag, PVector _location, float _sizeOffset ) {
-    pushMatrix();
-    translate(_location.x, 0.0, _location.z);
-    //Top Strip Tail
-    beginShape(QUAD_STRIP);
-    for ( int n = 1; n < _flag.numNodes; n++ ) {
-      float x1  = _flag.spine[n][0];
-      float z1   = _flag.spine[n][1];
-      vertex( -x1, -bodySizeH*.5, z1 );
-      vertex( -x1, -bodySizeH*0.35, z1 );
-    }
-    endShape();
-    //Top MID Strip Tail
-    beginShape(QUAD_STRIP);
-    for ( int n = 1; n < _flag.numNodes- (_flag.numNodes*0.4); n++ ) {
-      float x1  = _flag.spine[n][0];
-      float z1   = _flag.spine[n][1];
-      vertex( -x1, -bodySizeH*0.2, z1 );
-      vertex( -x1, -bodySizeH*0.05, z1 );
-    }
-    endShape();
-    //Bottom MID Strip Tail
-    beginShape(QUAD_STRIP);
-    for ( int n = 1; n < _flag.numNodes- (_flag.numNodes*0.4); n++ ) {
-      float x1  = _flag.spine[n][0];
-      float z1   = _flag.spine[n][1];
-      vertex( -x1, bodySizeH*0.05, z1 );
-      vertex( -x1, bodySizeH*0.2, z1 );
-    }
-    endShape();
-    //Bottom Strip Tail
-    beginShape(QUAD_STRIP);
-    for ( int n = 1; n < _flag.numNodes; n++ ) {
-      float x1  = _flag.spine[n][0];
-      float z1   = _flag.spine[n][1];
-      vertex( -x1, bodySizeH*0.35, z1 );
-      vertex( -x1, bodySizeH*.5, z1 );
-    }
     endShape();
     popMatrix();
   }
