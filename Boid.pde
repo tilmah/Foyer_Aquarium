@@ -21,7 +21,7 @@ class Boid {
   //Constructor
   Boid(float locationX, float locationY, float _maxspeed, float _maxforce) {
     acceleration = new PVector(0, 0, 0);
-    neighborhoodRadius = 30.0;
+    neighborhoodRadius = 40.0;
     hadSay = false;
 
     float angle = random(TWO_PI);
@@ -168,7 +168,7 @@ class Boid {
     PVector ali = align(boids);      
     PVector coh = cohesion(boids);   
 
-    sep.mult(1.5);
+    sep.mult(1.55);
     ali.mult(1.0);
     coh.mult(1.0);
 

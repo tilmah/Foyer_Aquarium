@@ -40,8 +40,8 @@ class Fish extends Boid {
     //Initial boid attributes
     super(locationX, locationY, 1.5, 0.03);
     //Static body size
-    bodySizeW    = random(15,35);
-    bodySizeH    = bodySizeW/2.5;
+    bodySizeW    = random(15,50);
+    bodySizeH    = bodySizeW*.35;
     //Fish colour
     c1 = #d44fff;
     c2 = #8EEEDF;
@@ -184,11 +184,19 @@ class Fish extends Boid {
     //Translate/move to position
     translate(location.x, location.y, location.z);
     //Rotate whole fish
-    rotateZ(atan(YawNorm.y/(YawNorm.x));
-    
+    float tiltZ = atan(YawNorm.y/YawNorm.x);
+    if (tiltZ>.5) {
+      tiltZ = .5;
+    }
+    if (tiltZ<-0.5) {
+       tiltZ=-0.5; 
+    }
+    rotateY(atan2((-YawNorm.z), (YawNorm.x)));
+    rotateZ((asin(YawNorm.y/2)));
+    //rotateZ(tiltZ);
     //Run the renders
-    renderHead( body, 0.5, 0.25 );
-    renderBody( body, 0.5, 0.25 );
+    renderHead( body, 0.5, 0.25, tiltZ);
+    renderBody( body, 0.5, 0.25, tiltZ);
    // PVector tailLocation = new PVector(body.spine[numBodySegments - 1][0], 0, body.spine[numBodySegments - 1][1] );
    // renderTail(tail, tailLocation, 0.75);
     
@@ -201,14 +209,15 @@ class Fish extends Boid {
     body.swim();
 
     //text(YawNorm.x,30,0);
-    //text(YawNorm.y,30,10);
-    //text(YawNorm.z,30,20);
+    //text(YawNorm.z,30,10);
+    //text(tiltZ,30,20);
     popMatrix();
   }
   
- private void renderBody( Flagellum _flag, float _sizeOffsetA, float _sizeOffsetB ) {
+ private void renderBody( Flagellum _flag, float _sizeOffsetA, float _sizeOffsetB , float _tilt) {
  //render body
   pushMatrix();
+  rotateY(-atan2((-YawNorm.z),(YawNorm.x)));
     fill(mainColour);
       for ( int n = 1; n < _flag.numNodes-6; n++ ) {
   
@@ -218,10 +227,10 @@ class Fish extends Boid {
         float z2   = _flag.spine[n][1];
   
         beginShape();
-        vertex( x1+.2, (bodySizeH/2)-(n*.15), z1 );
-        vertex( x1-.2, (bodySizeH/2)-(n*.15), z1 );
-        vertex( x2-.2, -(bodySizeH/2)+(n*.15), z2 );
-        vertex( x2+.2, -(bodySizeH/2)+(n*.15), z2 );
+        vertex( x1+.3, (bodySizeH/2)-(n*.15), z1 );
+        vertex( x1-.3, (bodySizeH/2)-(n*.15), z1 );
+        vertex( x2-.3, -(bodySizeH/2)+(n*.15), z2 );
+        vertex( x2+.3, -(bodySizeH/2)+(n*.15), z2 );
         endShape();
       }
         //Top Strip Tail
@@ -263,9 +272,10 @@ class Fish extends Boid {
     popMatrix();
  }
  
-  private void renderHead( Flagellum _flag, float _sizeOffsetA, float _sizeOffsetB ) {
+  private void renderHead( Flagellum _flag, float _sizeOffsetA, float _sizeOffsetB, float _tilt) {
     pushMatrix();
-    rotateY(atan2((-YawNorm.z),(YawNorm.x)));
+    //rotateZ(_tilt);
+    
     //Head
     fill(mainColour);
     beginShape();

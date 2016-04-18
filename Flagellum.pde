@@ -12,7 +12,7 @@ class Flagellum {
   float theta;
   float count;
   float thetaVel;
-
+  float tiltZ = 0.0;
 
   Flagellum( float _sizeW, float _sizeH, int _numNodes, float _muscleRange ) {
 
@@ -31,7 +31,7 @@ class Flagellum {
     count     = 0;
     theta     = PI;
     thetaVel   = 0;
-
+    tiltZ=0.0;
 
     // Initialize spine positions
     for ( int n = 0; n < numNodes; n++ ) {
