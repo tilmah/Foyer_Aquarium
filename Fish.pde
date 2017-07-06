@@ -97,7 +97,7 @@ class Fish extends Boid {
       }
     }
     //Get Tuio Cursors
-    ArrayList<TuioCursor> tuioCursorList = tuioClient.getTuioCursorList();
+    //ArrayList<TuioCursor> tuioCursorList = tuioClient.getTuioCursorList();
     //Decide what to do
     if (fleeInterActTimer>0 && PVector.dist(location, interActFlee)<200) { //if still scared keep fleeing interaction
       super.evade(interActFlee, fish);
@@ -111,7 +111,7 @@ class Fish extends Boid {
         fishLine = fishTalk[i];
         lastFearTalk = int(random(600,800));
       }
-    } else if (tuioCursorList.size ()>0 && curiosity>=70) { //cursor list exists and actually curious
+    } /*else if (tuioCursorList.size ()>0 && curiosity>=70) { //cursor list exists and actually curious
       //need to add a find closest tuio object loop.
       TuioCursor tcur0 = tuioCursorList.get(0);
       interAct = new PVector(tcur0.getScreenX(width), height-tcur0.getScreenY(height), 0.0);
@@ -151,7 +151,7 @@ class Fish extends Boid {
         happiness/=2;//make more unhappy
         fear+=20;//add to the fear
       }
-    } else {
+    }*/ else {
       super.flock(fish);//Flock - School with friends.
     }
 

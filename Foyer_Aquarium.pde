@@ -1,36 +1,5 @@
-//import processing.video.*;
 
-import ddf.minim.spi.*;
-import ddf.minim.signals.*;
-import ddf.minim.*;
-import ddf.minim.analysis.*;
-import ddf.minim.ugens.*;
-import ddf.minim.effects.*;
-
-// import the TUIO library
-import TUIO.*;
-// declare a TuioProcessing client
-TuioProcessing tuioClient;
-
-// these are some helper variables which are used
-boolean verbose = false; // print console debug messages
-boolean callback = true; // updates only after callbacks
-
-//Audio datatypes using minim
-Minim minim;
-AudioPlayer sndAqua;
-AudioPlayer sndGuitar;
-AudioPlayer sndBass;
-AudioPlayer sndDrums;
-AudioPlayer sndKeys;
-
-//for audio playing
-boolean audioPlay;
-
-//Capture video;
-PImage prevFrame;
-
-//TuioObjsList
+//Hand Size
 float handSize=50.0;
 
 //Shark
@@ -43,6 +12,7 @@ Flock flock;
 Jellyfish jelly1;
 Jellyfish jelly2;
 Jellyfish jelly3;
+
 //Bubbles
 ArrayList<Bubble> bubbles = new ArrayList<Bubble>();
 
@@ -59,27 +29,18 @@ float[][] f = new float[count][8];
 PFont secrcode;
 
 void setup() {
-  size(1920, 1200, P3D);
+  size(720, 720, P3D);
   smooth(4);
   /*Camera Setup
    */ 
 
   //Audio setup
-  minim = new Minim(this);
-  sndAqua = minim.loadFile("Water.wav", 2048);
-  sndGuitar = minim.loadFile("Guitar.wav", 2048);
-  sndBass = minim.loadFile("Bass.wav", 2048);
-  sndDrums = minim.loadFile("Drums.wav", 2048);
-  sndKeys = minim.loadFile("Pads_Keys.wav", 2048);
-  audioPlay = false;
-
   frameRate(45); //45
 
   //Shark
   shark = new Shark(width/2, height/2);
 
   flock = new Flock();
-  
 
   // Add an initial set of fish into the system
   for (int i = 0; i < 50; i++) {
@@ -108,53 +69,13 @@ void setup() {
   }
   //Screen noise
   //noiseAnimation = new Animation("Noise", 10);
-
-  // finally we create an instance of the TuioProcessing client
-  // since we add "this" class as an argument the TuioProcessing class expects
-  // an implementation of the TUIO callback methods in this class (see below)
-  tuioClient  = new TuioProcessing(this);
   
   secrcode = createFont("monofonto.ttf", 12);
 }
 
 void draw() {
-  /*/Camera draw
-   */
   //background, version 1:31134b
   background(#211238);
-
-  //range conversion - turn this into function.
-  float OldRange = 480 - 0;
-  float NewRange = 0 - -80;
-  float aquaVolume = (((mouseY) * NewRange) / OldRange) + -80;
-  
-  //PVector 
-  //jellyTrack
-  
-  //start sounds
-  if (!audioPlay) {
-    sndAqua.play();
-    sndAqua.loop();
-    sndKeys.setGain(-2);
-
-    sndGuitar.play();
-    sndGuitar.loop();
-    sndGuitar.setGain(-5);
-
-    sndBass.play();
-    sndBass.loop();
-    sndBass.setGain(-80);
-
-    sndDrums.play();
-    sndDrums.loop();
-    sndDrums.setGain(-80);
-
-    sndKeys.play();
-    sndKeys.loop();
-    sndKeys.setGain(-80);
-
-    audioPlay=true;
-  }
   
   // pushMatrix();//pushed back.. 
   // translate(0.0,0.0,-200.0);//..for debugging
@@ -171,8 +92,6 @@ void draw() {
   jelly1.update();
   jelly2.update();
   jelly3.update();
-  
-  //popMatrix();//dont forget to debug debug this one
 
   //Update Bubbles
   //Add, move, destroy
@@ -218,67 +137,8 @@ void draw() {
  
   //Update Noise animation
     //noiseAnimation.display(0, 0);
-  //Circle display for interaction placement/GUI  
-  //---TUIO Stuffs
-  ArrayList<TuioCursor> tuioCursorList = tuioClient.getTuioCursorList();
-
-  for (int i=0; i<tuioCursorList.size(); i++) {
-    TuioCursor tcur = tuioCursorList.get(i);
-    handCursor(tcur.getScreenX(width),height-tcur.getScreenY(height),50.0);
-  }
-  
-  //Set volumes
-  //shark bass
-  if (shark.location.x > -200.0 && shark.location.x<(width/4)*3) {
-      sndBass.setGain(sndBass.getGain()+0.1);
-      if (sndBass.getGain()>0.0) {
-        sndBass.setGain(0.0); 
-      }
-    } else if (shark.location.x < 0.0 || shark.location.x>(width/4)*3) {
-      sndBass.setGain(sndBass.getGain()-0.05);
-      if (sndBass.getGain()<-80.0) {
-        sndBass.setGain(-80.0); 
-      }
-    }
-   //Debug
-   //text("x:"+shark.location.x, 10, 20);
-   //text(sndBass.getGain(), 10, 40);
-  //Jelly fish keys
-  if (jelly1.location.x > (width/4) && jelly1.location.x<(width/4)*3) {
-    if (jelly1.location.y > (height/4) || jelly1.location.y<(height/4)*3) {
-        if (jelly2.location.x > (width/4) && jelly2.location.x<(width/4)*3) {
-          if (jelly2.location.y > (height/4) || jelly2.location.y<(height/4)*3) {
-              if (jelly3.location.x > (width/4) && jelly3.location.x<(width/4)*3) {
-                  if (jelly3.location.y > (height/4) || jelly3.location.y<(height/4)*3) {
-                      sndKeys.setGain(sndKeys.getGain()+0.1);
-                  }
-              }
-          }
-        }
-    }
-  } else {
-      sndKeys.setGain(sndKeys.getGain()-0.05);
-    }
-    if (sndKeys.getGain()>1.0) {
-        sndKeys.setGain(1.0); 
-    }
-    if (sndKeys.getGain()<-80.0) {
-        sndKeys.setGain(-80.0); 
-      }
-  //Debug    
-  //text(sndKeys.getGain(), 10, 100);
-  //Drums level interact
-  if (tuioCursorList.size()>0) {
-      sndDrums.setGain(sndDrums.getGain()+0.065);
-      if (sndDrums.getGain()>0.0) {
-        sndDrums.setGain(0.0); 
-      }
-    } else {
-      sndDrums.setGain(sndDrums.getGain()-0.01);
-      if (sndDrums.getGain()<-80.0) {
-        sndDrums.setGain(-80.0); 
-      }
-    }
-    //Debug
-   //text(tuioCursorList.size(), 10, 50);
+    
+   //Circle display for interaction placement/GUI  
+   //or
+   //handCursor(tcur.getScreenX(width),height-tcur.getScreenY(height),50.0);
 }

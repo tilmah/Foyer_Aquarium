@@ -50,12 +50,6 @@ class Boid {
   }
 
   void avoidWalls() {
-    //PVector avoidSum = new PVector(0, 0, 0);
-    //avoidSum.add(avoid(new PVector(location.x, 0-outCam, location.z)));
-    //avoidSum.add(avoid(new PVector(location.x, height+outCam, location.z)));
-    //avoidSum.add(avoid(new PVector(location.x, location.y, -500.0)));
-    //avoidSum.add(avoid(new PVector(location.x, location.y, 300.0)));
-    //avoidSum.limit(maxforce);
     if (location.y<0.0) {
       PVector desired = new PVector(velocity.x*maxspeed, maxspeed/2, velocity.z);
       desired.normalize();

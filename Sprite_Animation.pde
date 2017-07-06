@@ -1,6 +1,6 @@
 // Class for animating a sequence of GIFs
 
-class Animation {
+/*class Animation {
   PImage[] images;
   int imageCount;
   int frame;
@@ -24,4 +24,4 @@ class Animation {
   int getWidth() {
     return images[0].width;
   }
-}
+}*/
