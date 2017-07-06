@@ -1,4 +1,4 @@
-void handCursor(float x, float y, float size) {
+/*void handCursor(float x, float y, float size) {
       pushMatrix();
       translate(x,y);
       pushStyle();
@@ -50,4 +50,4 @@ void handCursor(float x, float y, float size) {
       popStyle();
       popMatrix();
     }
-  
+  */
